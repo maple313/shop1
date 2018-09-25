@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.qin.shop.manager.dao.SceneryIndexMapper">
+    <sql id="Base_Column_List">
+        s.sid,s.sname,s.sprice,
+        s.straffic,s.slocation,s.scontent,c.cname
+    </sql>
+
+    <select id="listIndex" resultType="com.qin.manager.model.vo.SceneryIndex">
+        select
+        <include refid="Base_Column_List"/>
+        from tv_scenery s
+        left join tv_city c
+        on s.scid=c.cid
+        where sstatus=0
+    </select>
+</mapper>

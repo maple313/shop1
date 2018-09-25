@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.qin.shop.manager.dao.SceneryMapper">
+    <sql id="Base_Column_List">
+        s.sid,s.sname,s.sprice,s.sphone,
+        s.straffic,s.slocation,s.scid,s.scontent,s.sstatus,s.sdescribe
+    </sql>
+
+    <!--第2个-->
+    <select id="listSceneryByPage" resultType="com.qin.manager.model.vo.SceneryCustom">
+        select
+        <include refid="Base_Column_List"/>
+        from tv_scenery s
+        left join tv_city c
+        on s.scid=c.cid
+        where s.sstatus=0
+        <if test="query != null and query.title != null and query.title != ''">
+            and s.sname like concat('%',#{query.title},'%')
+        </if>
+        order by s.sid desc
+        limit #{page.offset},#{page.limit}
+    </select>
+
+    <!--第1个-->
+    <select id="customScenery" resultType="java.lang.Long">
+        select count(sid)
+        from tv_scenery
+        where sstatus=0
+        <if test="query != null and query.title != null and query.title != ''">
+            and sname like concat('%',#{query.title},'%')
+        </if>
+    </select>
+
+    <!--第5个-->
+    <insert id="insert">
+        insert into tv_scenery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sceneryCustom.sname != null">
+                sname,
+            </if>
+            <if test="sceneryCustom.sprice != null">
+                sprice,
+            </if>
+            <if test="sceneryCustom.sphone != null">
+                sphone,
+            </if>
+            <if test="sceneryCustom.straffic != null">
+                straffic,
+            </if>
+            <if test="sceneryCustom.slocation != null">
+                slocation,
+            </if>
+            <if test="sceneryCustom.scid != null">
+                scid,
+            </if>
+            <if test="sceneryCustom.scontent != null">
+                scontent,
+            </if>
+            <if test="sceneryCustom.sstatus != null">
+                sstatus,
+            </if>
+            <if test="sceneryCustom.sdescribe != null">
+                sdescribe,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sceneryCustom.sname != null">
+                #{sceneryCustom.sname},
+            </if>
+            <if test="sceneryCustom.sprice != null">
+                #{sceneryCustom.sprice},
+            </if>
+            <if test="sceneryCustom.sphone != null">
+                #{sceneryCustom.sphone},
+            </if>
+            <if test="sceneryCustom.straffic != null">
+                #{sceneryCustom.straffic},
+            </if>
+            <if test="sceneryCustom.slocation != null">
+                #{sceneryCustom.slocation},
+            </if>
+            <if test="sceneryCustom.scid != null">
+                #{sceneryCustom.scid},
+            </if>
+            <if test="sceneryCustom.scontent != null">
+                #{sceneryCustom.scontent},
+            </if>
+            <if test="sceneryCustom.sstatus != null">
+                #{sceneryCustom.sstatus},
+            </if>
+            <if test="sceneryCustom.sdescribe != null">
+                #{sceneryCustom.sdescribe},
+            </if>
+        </trim>
+    </insert>
+
+    <!--第4个-->
+    <update id="updateByIds">
+        update tv_scenery
+        set sstatus=1
+        where sid
+        in
+        <foreach item="item" index="index" collection="sceneryCustom.ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!--第3个-->
+    <update id="updateBySid">
+        update tv_scenery
+        <set>
+            <if test="sceneryCustom.sname != null">
+                sname = #{sceneryCustom.sname},
+            </if>
+            <if test="sceneryCustom.sprice != null">
+                sprice = #{sceneryCustom.sprice},
+            </if>
+            <if test="sceneryCustom.sphone != null">
+                sphone = #{sceneryCustom.sphone},
+            </if>
+            <if test="sceneryCustom.straffic != null">
+                straffic = #{sceneryCustom.straffic},
+            </if>
+            <if test="sceneryCustom.slocation != null">
+                slocation = #{sceneryCustom.slocation},
+            </if>
+            <if test="sceneryCustom.scid != null">
+                scid = #{sceneryCustom.scid},
+            </if>
+            <if test="sceneryCustom.scontent != null">
+                scontent = #{sceneryCustom.scontent},
+            </if>
+            <if test="sceneryCustom.sstatus != null">
+                sstatus = #{sceneryCustom.sstatus},
+            </if>
+        </set>
+        where sid=#{sceneryCustom.sid}
+    </update>
+
+    <!--第6个-->
+    <select id="selectBySid" resultType="com.qin.manager.model.vo.SceneryCustom">
+        select
+        sid,sname,sprice,sphone,
+        straffic,slocation,scid,scontent,sstatus
+        from tv_scenery
+        where
+        sid=#{sceneryCustom.sid}
+    </select>
+
+
+    <!--<select id="selectOrderBYName" resultType="com.qin.travel.manager.model.vo.SceneryCustem">
+       SELECT c.name as catName
+       FROM tv_scenery
+       LEFT JOIN tb_item_cat c
+       ON i.cid=c.id
+       GROUP BY c.name
+    </select>-->
+</mapper>
