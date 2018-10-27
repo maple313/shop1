@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 public class ManagerIndexAction {
 
-    //织入
+    //织入 xx
     @Autowired
     private SceneryService ser;
 
